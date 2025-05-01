@@ -1,0 +1,192 @@
+{% extends 'base.html' %}
+
+{% block extra_styles %}
+<style>
+#heading {
+  font-size: 40px;
+  color: #26a1e4;
+}
+
+.dashboard-container {
+  max-width: 1000px;
+  margin: 30px auto;
+  padding: 40px;
+  background-color: #fff; /* White background */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Box shadow */
+  border-radius: 8px; /* Optional: adds rounded corners */
+}
+
+.dashboard-container h2 {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #333;
+}
+
+.dashboard-container a.add-product {
+  display: inline-block;
+  background-color: #fff;
+  color: rgb(70, 70, 70);
+  padding: 10px 15px;
+  border-radius: 8px;
+  border: 2px solid rgb(70, 70, 70);
+  text-decoration: none;
+  margin-bottom: 20px;
+  transition: 0.3s;
+}
+
+.dashboard-container a.add-product:hover {
+  background-color: rgb(70, 70, 70);
+  color: white;
+  transition: 0.3s;
+}
+
+.products-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: flex-start; /* Left-align the product cards */
+}
+
+.product-card {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 15px;
+  width: 220px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.product-card strong {
+  font-size: 18px;
+  color: #333;
+}
+
+.product-card p {
+  margin: 8px 0;
+  color: #555;
+}
+
+.product-card a.update-link {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 8px 12px;
+  background-color: #1f81d1;
+  color: white;
+  border-radius: 6px;
+  text-decoration: none;
+}
+
+.product-card a.update-link:hover {
+  background-color: #1666b7;
+}
+
+.prebookings-link {
+  display: block;
+  margin-top: 30px;
+  text-align: center;
+  color: #333;
+  font-weight: bold;
+}
+
+.messages {
+  list-style: none;
+  padding: 0;
+  margin: 20px 0;
+}
+
+.delete-button {
+  background-color: #ff5f4d;
+  color: white;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 5px;
+  margin-top: 10px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s;
+}
+
+.delete-button:hover {
+  background-color: #e61f00;
+}
+
+.messages li {
+  padding: 10px;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+
+.messages li.success {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+/* Responsive Design */
+@media (max-width: 480px) {
+  .dashboard-container {
+    padding: 15px;
+  }
+  
+  .products-list {
+    flex-direction: column; /* Stack product cards vertically on small screens */
+  }
+
+  .product-card {
+    width: 100%; /* Full width for product cards on small screens */
+  }
+}
+</style>
+<script>
+  function confirmDelete() {
+    return confirm("Are you sure you want to delete this product?");
+  }
+</script>
+
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+  <h2 id="heading">📦 {{user.username}}'s Dashboard</h2>
+  <h2 style="text-align: left;font-size: 30px; color: #1E293B; border-left: 5px solid #FFD166; padding-left: 5px;">{{user.shop.name}}</h3>
+    {% if messages %}
+  <ul class="messages">
+    {% for message in messages %}
+      <li class="{{ message.tags }}">{{ message }}</li>
+    {% endfor %}
+  </ul>
+{% endif %}
+
+
+  <a href="{% url 'add_product' %}" class="add-product">➕ Add New Product</a>
+
+  <h3>Your Products</h3>
+
+  {% if products %}
+    <div class="products-list">
+      {% for product in products %}
+        <div class="product-card">
+          <strong>{{ product.name }}</strong>
+          <p>Stock: {{ product.stock_quantity }}</p>
+          <a href="{% url 'update_product' product.id %}" class="update-link">Update</a>
+          <form action="{% url 'delete_product' product.id %}" method="post" style="display:inline;" onsubmit="return confirmDelete();">
+            {% csrf_token %}
+            <button type="submit" class="delete-button">Delete</button>
+          </form>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p>No products yet.</p>
+  {% endif %}
+
+  <a href="{% url 'view_pre_bookings' %}" class="prebookings-link">View Pre-bookings</a>
+</div>
+{% endblock %}

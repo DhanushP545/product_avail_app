@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_styles %}
+<link rel="stylesheet" href="{% static 'styles/shop_products.css' %}">
+{% endblock %}
+
+{% block content %}
+  <div class="shop-products-container">
+    <a href="{% url 'buyer_home' %}" class="back-button">← Back to Home</a>
+
+    <h2>Products from {{ shop.name }}</h2>
+
+    <div class="product-grid">
+        {% for product in products %}
+          <div class="product-card">
+            <h4>{{ product.name }}</h4>
+            <p>₹ {{ product.price }}</p>
+            <p>Stock Available: {{ product.stock_quantity }}</p>
+      
+            {% if product.stock_quantity > 0 %}
+            <form method="post" action="{% url 'prebook_product' product.id %}">
+              {% csrf_token %}
+              <label for="quantity">Quantity:</label>
+              <input type="number" name="quantity" value="1" min="1" max="{{ product.stock_quantity }}">
+              
+              <button type="submit" class="prebook-button">Prebook Now</button>
+            </form>
+            {% else %}
+              <span class="out-of-stock">Out of Stock</span>
+            {% endif %}
+          </div>
+        {% empty %}
+          <p>No products available in this shop yet.</p>
+        {% endfor %}
+      </div>
+      
+
+  </div>
+{% endblock %}

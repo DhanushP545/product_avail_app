@@ -1,0 +1,72 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Product Avail App</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" type="text/css" href="{% static 'styles/base.css' %}">
+  {% block extra_styles %}{% endblock %}
+</head>
+<body>
+  <header>
+    <h1>🛒 Product Availability App</h1>
+  </header>
+
+  <nav>
+    <a href="{% url 'home' %}">Home</a>
+
+    {% if user.is_authenticated %}
+      {% if is_buyer %}
+        <a href="{% url 'user_profile' %}">Profile</a>
+        <a href="{% url 'logout' %}">Logout</a>
+      {% elif is_seller %}
+        <a href="{% url 'user_profile' %}">Profile</a>
+        {% if shop_exists %}
+          <a href="{% url 'seller_dashboard' %}">Dashboard</a>
+        {% else %}
+          <a href="{% url 'create_shop' %}">Create Shop</a>
+        {% endif %}
+        <a href="{% url 'logout' %}">Logout</a>
+      {% endif %}
+    {% else %}
+      <a href="{% url 'login' %}">Login</a>
+      <a href="{% url 'register' %}">Register</a>
+    {% endif %}
+  </nav>
+  
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-section">
+        <h4>About Us</h4>
+        <p>We are a platform connecting buyers and sellers for a smooth shopping experience.</p>
+      </div>
+      <div class="footer-section">
+        <h4>Contact Us</h4>
+        <ul>
+          <li>Email: team12@vrsec.in</li>
+          <li>Phone: +9977880012</li>
+          <li>Address: VRSEC, KANURu</li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="home">Home</a></li>
+          <li><a href="home">Categories</a></li>
+          <li><a href="home">Shop</a></li>
+          <li><a href="home">About</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Shop. All rights reserved.</p>
+    </div>
+  </footer>
+  
+</body>
+</html>

@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Prebook {{ product.name }}</h2>
+
+<form method="post">
+    {% csrf_token %}
+    <label for="quantity">Quantity:</label>
+    <input type="number" name="quantity" value="1" min="1" max="{{ product.stock_quantity }}">
+    
+    <button type="submit">Prebook Now</button>
+</form>
+
+<a href="{% url 'buyer_home' %}">Back to Home</a>
+{% endblock %}

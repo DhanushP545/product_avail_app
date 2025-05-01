@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% block extra_styles %}
+<style>
+.update-stock-container {
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+  color: #389cca;
+  font-size: 24px;
+  margin-bottom: 15px;
+}
+
+p {
+  color: #333;
+  font-size: 18px;
+  margin-bottom: 20px;
+}
+
+.update-stock-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.update-stock-form button {
+  background-color: #10B981;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+.update-stock-form button:hover {
+  background-color: #0a8159;
+}
+
+.update-stock-form p {
+  font-size: 14px;
+  margin-top: 5px;
+}
+</style>
+
+{% endblock %}
+{% block content %}
+  <div class="update-stock-container">
+    <h2>🛠️ Update Stock for {{ product.name }}</h2>
+    <p>Current Stock: <strong>{{ product.stock_quantity }}</strong></p> 
+
+    <form method="post" class="update-stock-form">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit" class="update-stock-btn">Update Stock</button>
+    </form>
+  </div>
+{% endblock %}

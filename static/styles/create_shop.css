@@ -1,0 +1,59 @@
+.create-shop-container {
+    max-width: 500px;
+    margin: 40px auto;
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .create-shop-container h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #2ba7c6;
+  }
+  
+  .create-shop-container form p {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 15px;
+  }
+  
+  .create-shop-container label {
+    flex: 1;
+    font-weight: bold;
+    margin-right: 10px;
+    color: #333;
+  }
+  
+  .create-shop-container input,
+  .create-shop-container select {
+    flex: 2;
+    padding: 8px;
+    font-size: 16px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+  }
+  
+  .create-shop-container button {
+    width: 100%;
+    padding: 12px;
+    background-color: #2ba7c6;
+    color: white;
+    font-size: 16px;
+    border: 2px solid #2ba7c6;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: 0.3s;
+  }
+  
+  .create-shop-container button:hover {
+    background-color: white;
+    color: #2ba7c6;
+    border: 2px solid #2ba7c6;
+    transition: 0.3s;
+
+  }
+  

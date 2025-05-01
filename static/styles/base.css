@@ -1,0 +1,126 @@
+/* Body and Main Layout */
+main {
+  height: 150vh;
+}
+
+body {
+  margin: 0;
+  font-family:'Roboto', sans-serif;
+  background-color: #F2F2F2; /* Light Grayish Background */
+}
+
+header {
+  background-color: #389cca; /* Blue Header */
+  color: #FFFFFF;
+  text-align: center;
+  padding: 20px;
+  margin: 0;
+}
+
+nav {
+  display: flex;
+  flex-direction: row;
+  background-color: #2B6C94; /* Darker Blue Navbar */
+  justify-content: space-around;
+  padding: 10px;
+}
+
+nav a {
+  color: #F8FAFC; /* Light Text for Links */
+  text-decoration: none;
+  font-size: 18px;
+  margin: 5px 0;
+  transition: color 0.3s ease;
+}
+
+nav a:hover {
+  color: #E0F2FE; /* Light Blue on Hover */
+}
+
+/* Footer Styling */
+.footer {
+  background-color: #333; /* Dark Footer Background */
+  color: white;
+  padding: 40px 20px;
+  font-size: 14px;
+  text-align: center;
+}
+
+.footer-container {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 30px;
+  margin-bottom: 20px;
+}
+
+.footer-section {
+  flex: 1;
+  min-width: 250px;
+}
+
+.footer-section h4 {
+  font-size: 18px;
+  margin-bottom: 15px;
+  color: #fff;
+}
+
+.footer-section p,
+.footer-section ul {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #ccc; /* Light Gray for Readable Text */
+}
+
+.footer-section ul {
+  padding: 0;
+  list-style-type: none;
+}
+
+.footer-section ul li {
+  margin: 5px 0;
+}
+
+.footer-section ul li a {
+  color: #ccc; /* Subtle Footer Link Color */
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.footer-section ul li a:hover {
+  color: #fff; /* White on Hover */
+}
+
+/* Footer Bottom Section */
+.footer-bottom {
+  background-color: #222; /* Darker Footer Bottom */
+  padding: 10px;
+  color: #aaa; /* Light Gray Text */
+  font-size: 12px;
+}
+
+.footer-bottom p {
+  margin: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .footer-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .footer-section {
+    min-width: 100%;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .footer-section h4 {
+    font-size: 16px;
+  }
+
+  .footer-bottom {
+    font-size: 14px;
+  }
+}

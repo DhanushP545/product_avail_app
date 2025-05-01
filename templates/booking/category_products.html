@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_styles %}
+  <link rel="stylesheet" href="{% static 'styles/buyer_home.css' %}">
+{% endblock %}
+
+{% block content %}
+<main class="buyer-home-container">
+
+  <h2>Products in {{ category.name }}</h2>
+
+  {% if products %}
+    <div class="search-results">
+      {% for product in products %}
+        <div class="product-card">
+          <p style="font-weight: bold;">{{ product.name }}</p>
+          <p>₹ {{ product.price }}</p>
+          <p style="font-weight: bold;">{{product.seller.shop.name}}</p>
+
+          <p>Stock: {{ product.stock_quantity }}</p>
+          {%  if product.seller.shop.phone_number %}
+            <p>Phone : <span style="font-weight: bold;">{{product.seller.shop.phone_number}}</span></p>
+            {% endif %}
+          <p id="distance-{{ product.id }}">Calculating distance...</p>
+            <script>
+              // Check if geolocation is supported
+              if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                  const userLat = position.coords.latitude;
+                  const userLon = position.coords.longitude;
+
+                  // Calculate distance between user and shop
+                  const shopLat = {{ product.seller.shop.latitude|default:"0" }};
+                  const shopLon = {{ product.seller.shop.longitude|default:"0" }};
+
+                  // Calculate the distance only if both coordinates are available
+                  if (shopLat !== 0 && shopLon !== 0) {
+                    const distance = calculateDistance(userLat, userLon, shopLat, shopLon);
+                    document.getElementById('distance-{{ product.id }}').innerText = "Distance: " + distance.toFixed(2) + " km";
+                  } else {
+                    document.getElementById('distance-{{ product.id }}').innerText = "Shop location unavailable.";
+                  }
+                });
+              } else {
+                document.getElementById('distance-{{ shop.id }}').innerText = "Geolocation not supported.";
+              }
+
+              // Function to calculate distance using Haversine formula
+              function calculateDistance(lat1, lon1, lat2, lon2) {
+                const R = 6371; // Radius of Earth in km
+                const dLat = (lat2 - lat1) * Math.PI / 180;
+                const dLon = (lon2 - lon1) * Math.PI / 180;
+                const a = 
+                  Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                  Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                  Math.sin(dLon / 2) * Math.sin(dLon / 2);
+                const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+                return R * c; // Distance in km
+              }
+            </script>
+          <form method="post" action="{% url 'prebook_product' product.id %}">
+            {% csrf_token %}
+            <label>Quantity:</label>
+            <input type="number" name="quantity" min="1" max="{{ product.stock_quantity }}" value="1" required>
+            <button type="submit">Prebook</button>
+          </form>
+          <br>
+          <div class="button-container">
+            <a href="https://www.google.com/maps?q={{ product.seller.shop.latitude }},{{ product.seller.shop.longitude }}" target="_blank" class="location-button">
+              View Location
+            </a>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p>No products available in this category yet.</p>
+  {% endif %}
+
+</main>
+{% endblock %}

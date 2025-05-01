@@ -1,0 +1,172 @@
+{% extends "base.html" %}
+{% block extra_styles %}
+<style>
+/* Seller Dashboard Table Styling (Card-like Appearance) */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  max-height: 400px; /* Limit height of table */
+  overflow: auto; /* Allow scrolling if the content exceeds max-height */
+  background-color: #fff; /* White background for card effect */
+  border-radius: 10px; /* Rounded corners */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Soft shadow for card effect */
+}
+
+thead {
+  background-color: #f4f4f4;
+  color: #333;
+  font-weight: bold;
+}
+
+th, td {
+  padding: 12px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+th {
+  background-color: #f9f9f9;
+}
+
+td {
+  color: #333;
+}
+
+/* Action Buttons in Table (Card) */
+form button {
+  padding: 8px 16px;
+  background-color: #333;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  margin-right: 10px;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+form button:hover {
+  background-color: #555;
+  transform: translateY(-2px); /* Lift effect */
+}
+
+/* Success and Error Messages */
+.messages {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.messages li {
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 4px;
+  background-color: #f8f8f8;
+  color: #333;
+  font-size: 14px;
+}
+
+.messages li.success {
+  background-color: #e7f9e7;
+  color: #4caf50;
+}
+
+.messages li.error {
+  background-color: #f8d7da;
+  color: #f44336;
+}
+
+/* Empty Table Message */
+td[colspan="6"] {
+  text-align: center;
+  font-size: 16px;
+  color: #888;
+  padding: 20px;
+  font-style: italic; /* Italicized for emphasis */
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  table {
+    max-height: 350px; /* Slightly smaller max height on smaller screens */
+  }
+
+  th, td {
+    padding: 8px; /* Smaller padding for mobile */
+  }
+
+  /* Adjust button size */
+  form button {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+
+  .messages li {
+    font-size: 12px; /* Smaller text on mobile */
+  }
+
+  td[colspan="6"] {
+    font-size: 14px; /* Slightly smaller empty message text */
+  }
+}
+</style>
+{% endblock %}
+{% block content %}
+{% if messages %}
+  <ul class="messages">
+    {% for message in messages %}
+      <li class="{{ message.tags }}">{{ message }}</li>
+    {% endfor %}
+  </ul>
+{% endif %}
+<table>
+  <thead>
+    <tr>
+      <th>Product Name</th>
+      <th>Buyer</th>
+      <th>Quantity</th>
+      <th>Status</th>
+      <th>Booking Time</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for booking in pre_bookings %}
+      <tr>
+        <td>{{ booking.product.name }}</td>
+        <td>{{ booking.buyer.username }}</td>
+        <td>{{ booking.quantity }}</td>
+        <td>{{ booking.status }}</td>
+        <td>{{ booking.booking_time }}</td>
+        <td>
+          {% if booking.status|lower == "pending" %}
+            <form method="post" action="{% url 'accept_prebooking' booking.id %}" style="display:inline;">
+              {% csrf_token %}
+              <button type="submit" class="success-button">Confirm</button>
+            </form>
+            <form method="post" action="{% url 'reject_booking' booking.id %}" style="display:inline;">
+              {% csrf_token %}
+              <button type="submit" class="fail-button">Reject</button>
+            </form>
+          {% endif %}
+          {% if booking.status|lower == "accepted" %}
+          <form method="post" action="{% url 'confirm_prebooking' booking.id %}" style="display:inline;">
+          {% csrf_token %}
+          <button type="submit" class="success-button">Sold</button>
+          </form>
+          <form method="post" action="{% url 'cancel_prebooking' booking.id %}" style="display:inline;">
+          {% csrf_token %}
+            <button type="submit" class="fail-button">Unsold</button>
+          </form>
+          {% endif %}
+        </td>
+      </tr>
+    {% empty %}
+      <tr>
+        <td colspan="6">No pre-bookings yet</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

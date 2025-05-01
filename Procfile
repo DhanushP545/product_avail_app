@@ -1,0 +1,1 @@
+web: gunicorn product_avail_app.wsgi

@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_styles %}
+  <link rel="stylesheet" href="{% static 'styles/create_shop.css' %}">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+{% endblock %}
+
+{% block content %}
+  <div class="create-shop-container">
+    <h2>Create Your Shop</h2>
+    <form method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      
+      <h3>Pick your shop location:</h3>
+      <div id="map" style="height: 400px; margin-bottom: 20px;"></div>
+
+      <input type="hidden" id="latitude" name="latitude">
+      <input type="hidden" id="longitude" name="longitude">
+
+      <button type="submit">Create Shop</button>
+    </form>
+  </div>
+
+  <!-- Include scripts AFTER the map div exists -->
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script>
+    var map = L.map('map').setView([20.5937, 78.9629], 5); // Default India Center
+    
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+    
+    var marker;
+    // Try to get user's current location
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function(position) {
+      var lat = position.coords.latitude;
+      var lng = position.coords.longitude;
+      map.setView([lat, lng], 13); // Zoom in closer
+      marker = L.marker([lat, lng])
+        .addTo(map)
+        .bindPopup("You are here!")
+        .openPopup();
+
+      document.getElementById('latitude').value = lat;
+      document.getElementById('longitude').value = lng;
+    }, function() {
+      console.log("Geolocation permission denied or unavailable.");
+    });
+  } else {
+    console.log("Geolocation not supported by this browser.");
+  }
+    
+    map.on('click', function(e) {
+      var lat = e.latlng.lat;
+      var lng = e.latlng.lng;
+
+      if (marker) {
+        marker.setLatLng(e.latlng);
+      } else {
+        marker = L.marker([lat, lng]).addTo(map);
+      }
+
+      document.getElementById('latitude').value = lat;
+      document.getElementById('longitude').value = lng;
+    });
+  </script>
+{% endblock %}

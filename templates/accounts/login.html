@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block extra_styles %}
+<style>
+  .login-container {
+    max-width: 450px;
+    margin: 50px auto;
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  .login-container h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #389cca;
+  }
+  
+  form p {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+  }
+  
+  form label {
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: #555;
+  }
+  
+  form input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 15px;
+  }
+  
+  form button {
+    width: 100%;
+    padding: 12px;
+    background-color: #389cca;
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.3s ;
+    margin-top: 10px;
+  }
+  
+  form button:hover {
+    border: 2px solid #389cca;
+    color: #389cca;
+    background-color: white;
+    transition: 0.3s ;
+
+
+  }
+  
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="login-container">
+  <h2>Login</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Login</button>
+  </form>
+</div>
+{% endblock %}
